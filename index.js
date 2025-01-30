@@ -1,6 +1,3 @@
-// const openWeatherAPI = "bed6ddf4d2f3e9ecf1a09c19bbc1d0f5";
-// const iqAirAPI = "3e0f9ca9-f36d-4feb-bc24-0808edf0b0e1";
-
 var sunriseTime;
 var sunsetTime;
 
@@ -10,9 +7,8 @@ alert("Make sure to enter your openWeather, IQ Air API keys as well as the locat
 
 function start(){
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${document.getElementById("latitude").value}&lon=${document.getElementById("longitude").value}&appid=${document.getElementById("openWeatherAPI").value}&units=metric`)
-        .then(response => response.json())  // Convert response to JSON
+        .then(response => response.json())
         .then(data => {
-            // Extract relevant weather data from the API response
             const weather = data.weather[0].main;
             const temperature = Math.round(data.main.temp);
             const weatherDescription = data.weather[0].description;
@@ -64,7 +60,7 @@ function start(){
             console.error('Error fetching weather data:', error);
         });
 
-    fetch(`http://api.airvisual.com/v2/nearest_city?lat=${document.getElementById("latitude").value}&lon=${document.getElementById("longitude").value}&key=${document.getElementById("iqAirAPI").value}`)
+    fetch(`https://api.airvisual.com/v2/nearest_city?lat=${document.getElementById("latitude").value}&lon=${document.getElementById("longitude").value}&key=${document.getElementById("iqAirAPI").value}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById("aqi").innerHTML = `${data.data.current.pollution.aqius}`
@@ -112,6 +108,5 @@ function updateTime() {
     }
 }
 
-// Run function when the page finishes loading
 document.addEventListener("DOMContentLoaded", setInterval(updateTime, 1000));
 
