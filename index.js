@@ -2,7 +2,7 @@ var sunriseTime;
 var sunsetTime;
 
 
-alert("Make sure to enter your openWeather, IQ Air API keys as well as the location longitude and latitude as numbers (no letters and/or symbols)")
+//alert("Make sure to enter your openWeather, IQ Air API keys as well as the location longitude and latitude as numbers (no letters and/or symbols)")
 
 
 function start(){
@@ -14,18 +14,8 @@ function start(){
             const weather = data.weather[0].main;
             const temperature = Math.round(data.main.temp);
             const weatherDescription = data.weather[0].description;
-            document.getElementById("temp").innerHTML = `${temperature}ºC`;
-            document.getElementById("lowtemp").innerHTML = `Low: ${Math.round(data.main.temp_min)}ºC`;
-            document.getElementById("hightemp").innerHTML = `High: ${Math.round(data.main.temp_max)}ºC`;
-            document.getElementById("feelslike").innerHTML = `Feels like: ${Math.round(data.main.feels_like)}ºC`;
-            document.getElementById("weather").innerHTML = `${weather}`;
-            document.getElementById("imgweather").src = `img/${data.weather[0].icon}.svg`;
-            document.getElementById("weatherdescription").innerHTML = `${String(weatherDescription).charAt(0).toUpperCase() + String(weatherDescription).slice(1)}`;
-            document.getElementById("visibility").innerHTML = `Visibility: ${data.visibility}m`;
-            document.getElementById("winddeg").innerHTML = `Wind: ${data.wind.deg}º`;
-            document.getElementById("windspeed").innerHTML = `Speed: ${data.wind.speed} m/s`;
-            document.getElementById("compassarrow").style.rotate = `${data.wind.deg}deg`;
-            document.getElementById("location").innerHTML = `${data.name}, ${data.sys.country}`;
+
+            document.getElementById("humidity").innerHTML = `Humidity: ${data.main.humidity}%`;
             sunriseTime = new Date(data.sys.sunrise * 1000);
             sunsetTime = new Date(data.sys.sunset * 1000);
             document.getElementById("sunrise").innerHTML = `Sunrise 🌅 :  ${("0"+sunriseTime.getHours()).substr(-2)}:${("0"+sunriseTime.getMinutes()).substr(-2)}`;
@@ -55,7 +45,47 @@ function start(){
             }else if(data.weather[0].icon == "13d" || data.weather[0].icon =="13n") {
                 document.getElementById("bringItems").innerHTML += "Bring a pair of boots! There's gonna be snow!<br><br>";
             }
+            if (document.getElementById("unitSystem").value == "metric"){
+                document.getElementById("temp").innerHTML = `${temperature}ºC`;
+                document.getElementById("lowtemp").innerHTML = `Low: ${Math.round(data.main.temp_min)}ºC`;
+                document.getElementById("hightemp").innerHTML = `High: ${Math.round(data.main.temp_max)}ºC`;
+                document.getElementById("feelslike").innerHTML = `Feels like: ${Math.round(data.main.feels_like)}ºC`;
+                document.getElementById("weather").innerHTML = `${weather}`;
+                document.getElementById("imgweather").src = `img/${data.weather[0].icon}.svg`;
+                document.getElementById("weatherdescription").innerHTML = `${String(weatherDescription).charAt(0).toUpperCase() + String(weatherDescription).slice(1)}`;
+                document.getElementById("visibility").innerHTML = `Visibility: ${data.visibility}m`;
+                document.getElementById("winddeg").innerHTML = `Wind: ${data.wind.deg}º`;
+                document.getElementById("windspeed").innerHTML = `Speed: ${data.wind.speed} m/s`;
+                document.getElementById("compassarrow").style.rotate = `${data.wind.deg}deg`;
+                document.getElementById("location").innerHTML = `${data.name}, ${data.sys.country}`;
+            }
 
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+        });
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${document.getElementById("latitude").value}&lon=${document.getElementById("longitude").value}&appid=${document.getElementById("openWeatherAPI").value}&units=imperial`)
+        .then(response => response.json())
+        .then(data => {
+            const weather = data.weather[0].main;
+            const temperature = Math.round(data.main.temp);
+            const weatherDescription = data.weather[0].description;
+
+            if (document.getElementById("unitSystem").value == "imperial"){
+                document.getElementById("temp").innerHTML = `${temperature}ºF`;
+                document.getElementById("lowtemp").innerHTML = `Low: ${Math.round(data.main.temp_min)}ºF`;
+                document.getElementById("hightemp").innerHTML = `High: ${Math.round(data.main.temp_max)}ºF`;
+                document.getElementById("feelslike").innerHTML = `Feels like: ${Math.round(data.main.feels_like)}ºF`;
+                document.getElementById("weather").innerHTML = `${weather}`;
+                document.getElementById("imgweather").src = `img/${data.weather[0].icon}.svg`;
+                document.getElementById("weatherdescription").innerHTML = `${String(weatherDescription).charAt(0).toUpperCase() + String(weatherDescription).slice(1)}`;
+                document.getElementById("visibility").innerHTML = `Visibility: ${data.visibility * 3.281}ft`;
+                document.getElementById("winddeg").innerHTML = `Wind: ${data.wind.deg}º`;
+                document.getElementById("windspeed").innerHTML = `Speed: ${data.wind.speed} mph`;
+                document.getElementById("compassarrow").style.rotate = `${data.wind.deg}deg`;
+                document.getElementById("location").innerHTML = `${data.name}, ${data.sys.country}`;
+            }
 
         })
         .catch(error => {
@@ -65,23 +95,31 @@ function start(){
     fetch(`https://api.airvisual.com/v2/nearest_city?lat=${document.getElementById("latitude").value}&lon=${document.getElementById("longitude").value}&key=${document.getElementById("iqAirAPI").value}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById("aqi").innerHTML = `${data.data.current.pollution.aqius}`
-            if (document.getElementById("aqi").innerHTML <=50){
+            if(document.getElementById("aqiUnit").value=="aqius"){
+                document.getElementById("aqiType").innerHTML = "U.S. AQI";
+                document.getElementById("aqi").innerHTML = `${data.data.current.pollution.aqius}`;
+            }
+            if(document.getElementById("aqiUnit").value=="aqicn"){
+                document.getElementById("aqiType").innerHTML = "CN AQI";
+                document.getElementById("aqi").innerHTML = `${data.data.current.pollution.aqicn}`;
+            }
+
+            if (data.data.current.pollution.aqius <=50){
                 document.getElementById("healthinessaqi").innerHTML = "Healthy";
                 document.getElementById("aqibox").style.backgroundColor = "#0d541e";
-            }else if(document.getElementById("aqi").innerHTML <= 100){
+            }else if(data.data.current.pollution.aqius <= 100){
                 document.getElementById("healthinessaqi").innerHTML = "Decent";
                 document.getElementById("aqibox").style.backgroundColor = "#0d1254";
-            }else if(document.getElementById("aqi").innerHTML <= 150){
+            }else if(data.data.current.pollution.aqius <= 150){
                 document.getElementById("healthinessaqi").innerHTML = "Moderate risk";
                 document.getElementById("aqibox").style.backgroundColor = "#54450d";
-            }else if(document.getElementById("aqi").innerHTML <= 200){
+            }else if(data.data.current.pollution.aqius <= 200){
                 document.getElementById("healthinessaqi").innerHTML = "Unhealthy";
                 document.getElementById("aqibox").style.backgroundColor = "#54220d";
-            }else if(document.getElementById("aqi").innerHTML <= 100){
+            }else if(data.data.current.pollution.aqius <= 100){
                 document.getElementById("healthinessaqi").innerHTML = "Extremely Unhealthy";
                 document.getElementById("aqibox").style.backgroundColor = "#540d0d";
-            }else if(document.getElementById("aqi").innerHTML <= 100){
+            }else if(data.data.current.pollution.aqius <= 100){
                 document.getElementById("healthinessaqi").innerHTML = "Hazardous";
                 document.getElementById("aqibox").style.backgroundColor = "#3f0d54";
             }

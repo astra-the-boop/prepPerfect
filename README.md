@@ -7,4 +7,6 @@
 ### All are enter-able in the settings panel on the page, no need to download or edit any files
 
 # Update summary:
-- Added messages for the activity suggestions section
+- Added support for le freedom units™
+- Added support for Chinese AQI (AQICN)
+- Fixed humidity always showing as 0% (smh, i just forgot to add the thing)
