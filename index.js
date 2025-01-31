@@ -6,6 +6,8 @@ alert("Make sure to enter your openWeather, IQ Air API keys as well as the locat
 
 
 function start(){
+    document.getElementById("activitesToDo").innerHTML = "";
+    document.getElementById("bringItems").innerHTML = "";
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${document.getElementById("latitude").value}&lon=${document.getElementById("longitude").value}&appid=${document.getElementById("openWeatherAPI").value}&units=metric`)
         .then(response => response.json())
         .then(data => {
@@ -28,6 +30,7 @@ function start(){
             sunsetTime = new Date(data.sys.sunset * 1000);
             document.getElementById("sunrise").innerHTML = `Sunrise 🌅 :  ${("0"+sunriseTime.getHours()).substr(-2)}:${("0"+sunriseTime.getMinutes()).substr(-2)}`;
             document.getElementById("sunset").innerHTML = `Sunset 🌇 :  ${("0"+sunsetTime.getHours()).substr(-2)}:${("0"+sunsetTime.getMinutes()).substr(-2)}`;
+            console.log(data);
             if(data.main.feels_like <= 12){
                 document.getElementById("bringItems").innerHTML += "Bring a jacket and maybe wear some leggings to keep you warm<br><br>";
                 if(data.main.feels_like <= 9){
@@ -49,9 +52,8 @@ function start(){
                 document.getElementById("bringItems").innerHTML += "Bring an umbrella, raincoat or a pair of boots! It'll be quite wet<br><br>";
             }if(data.weather[0].icon == "11d"||data.weather[0].icon =="11n") {
                 document.getElementById("bringItems").innerHTML += "There's gonna be a thunderstorm! You should book a cab instead of walking.<br><br>";
-            }else if(data.weather[0].icon == "13d"||data.weather[0].icon =="13n") {
+            }else if(data.weather[0].icon == "13d" || data.weather[0].icon =="13n") {
                 document.getElementById("bringItems").innerHTML += "Bring a pair of boots! There's gonna be snow!<br><br>";
-                document.getElementById("activitesToDo").innerHTML += "Enjoy the snow! Maybe build a snowman or get into snowball fights?<br><br>";
             }
 
 
@@ -83,8 +85,33 @@ function start(){
                 document.getElementById("healthinessaqi").innerHTML = "Hazardous";
                 document.getElementById("aqibox").style.backgroundColor = "#3f0d54";
             }
-            if(data.data.current.pollution.aqius > 130) {
-                document.getElementById("bringItems").innerHTML += "Bring a face mask! The air quality outside isn't very good...<br><br>";
+            if(data.data.current.pollution.aqius > 100) {
+                document.getElementById("bringItems").innerHTML += "Bring a face mask! The air quality outside isn't looking very good...<br><br>";
+            }
+            if(data.data.current.pollution.aqius <= 100 && 8 <= data.data.current.weather.tp <= 21 &&
+                ["01d.svg", "01n.svg", "02d.svg", "02n.svg", "03d.svg", "03n.svg", "04d.svg", "04n.svg"].includes(
+                    document.getElementById("imgweather").src.split("/").pop()
+                )) {
+                document.getElementById("activitesToDo").innerHTML += "Go on a sightseeing stroll outside! Seems like the weather's really sweet, and the air is fresh<br><br>";
+                console.log("test");
+            }else if(data.data.current.pollution.aqius <= 100 && 8 <= data.data.current.weather.tp <= 21 &&
+                ["09d.svg", "09n.svg", "10d.svg", "10n.svg", "11d.svg", "11n.svg"].includes(
+                    document.getElementById("imgweather").src.split("/").pop()
+                )) {
+                document.getElementById("activitesToDo").innerHTML += "Seems to be quite rainy, you should go on an umbrella walk or sit under a balcony and enjoy the raindrops fall and the distant thunder.<br><br>";
+            }else if(data.data.current.pollution.aqius <= 100 && ["13d.svg","13n.svg"].includes(
+                document.getElementById("imgweather").src.split("/").pop()
+            )) {
+                document.getElementById("activitesToDo").innerHTML += "Enjoy the snow! Maybe catch some snowflakes or get into snowball fights?<br><br>";
+            }else if(data.data.current.pollution.aqius <= 100 && data.data.current.tp >= 26 &&
+                ["01d.svg", "01n.svg", "02d.svg", "02n.svg", "03d.svg", "03n.svg", "04d.svg", "04n.svg"].includes(
+                document.getElementById("imgweather").src.split("/").pop()
+            )) {
+                document.getElementById("activitesToDo").innerHTML += "Go to your local outdoors swimming pool or the beach!<br><br>";
+            }else if(data.data.current.pollution.aqius <= 100 && data.data.current.tp >= 26) {
+                document.getElementById("activitesToDo").innerHTML += "Go to your local indoors pool!<br><br>";
+            }else{
+                document.getElementById("activitesToDo").innerHTML += "Let's take a day to stay inside!<br><br>";
             }
             console.log(data);
 

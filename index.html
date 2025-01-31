@@ -51,16 +51,25 @@
 <div style="min-width: 600px; min-height: 980px;max-width: 600px; max-height: 980px;background-color: navajowhite; border-radius: 20px; margin: 50px 20px 20px 1270px; padding: 3px 10px 10px 10px; position: absolute; color: midnightblue">
     <h1 style="margin: 30px auto auto auto; font-size: 40px">If you intend on going outside:</h1>
     <h1 id="bringItems"></h1>
-    <h1 style="margin: 200px auto auto auto; font-size: 40px; position: relative">You should:</h1>
+    <h1 style="margin: 100px auto auto auto; font-size: 40px; position: relative">You should:</h1>
     <h1 id="activitesToDo"></h1>
 </div>
-<div style="min-width: 1170px; min-height: 300px;max-width: 1170px; max-height: 300px;background-color: saddlebrown; border-radius: 20px; margin: 730px 20px 20px 50px; padding: 2px 10px 10px 10px; position: absolute">
+<div style="min-width: 1170px; min-height: 300px;max-width: 1170px; max-height: 300px;background-color: saddlebrown; border-radius: 20px; margin: 730px 20px 20px 50px; padding: 0px 10px 10px 10px; position: absolute">
     <h1>Settings</h1>
-    <h3><a href="https://openweathermap.org/current">OpenWeather API</a> Key <input id="openWeatherAPI" type="password"></h3>
-    <h3><a href="https://www.iqair.com/air-quality-monitors/api">IQair API</a> Key <input id="iqAirAPI" type="password"></h3>
-    <h3>Location Latitude <input id="latitude" placeholder="Enter a number"></h3>
-    <h3>Location Longitude <input id="longitude" placeholder="Enter a number"></h3>
-    <button onclick="start()">Reset</button>
+    <table>
+        <tr>
+            <td style="text-align: left; width: 585px; padding-left: 10px">
+                <h3><a href="https://openweathermap.org/current">OpenWeather API</a> Key <input id="openWeatherAPI" type="password"></h3>
+                <h3><a href="https://www.iqair.com/air-quality-monitors/api">IQair API</a> Key <input id="iqAirAPI" type="password"></h3>
+                <h3>Location Latitude <input id="latitude" placeholder="Enter a number"></h3>
+                <h3>Location Longitude <input id="longitude" placeholder="Enter a number"></h3>
+            </td>
+            <td style="text-align: right; width: 585px; padding-left: 10px; font-size: 20px">[More units settings TBA]</td>
+        </tr>
+
+    </table>
+
+    <button onclick="start()">Apply changes</button>
 </div>
 </body>
 </html>
